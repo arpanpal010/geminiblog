@@ -1,0 +1,12 @@
+#all .bkp files
+*.bkp
+*.swp
+
+#anything in /ignore-dir
+ignore-dir/
+
+#resume and other docs in docs[disable before final commit]
+#docs/
+
+#pi sync
+sh

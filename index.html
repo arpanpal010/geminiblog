@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+		<!--link href="./images/favicon.svg" rel="icon" type="image/x-icon" /-->
+
+		<!--[IF lt IE 9]>
+			<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+
+		<title>
+			geminiBlog
+		</title>
+
+<!-- ######################################################## -->
+<!-- CSS #################################################### -->
+<!-- ######################################################## -->
+
+		<link rel="stylesheet" type="text/css" href="./stylesheets/style.css">
+
+<!-- ######################################################## -->
+<!-- JS ##################################################### -->
+<!-- ######################################################## -->
+
+		<script type="text/javascript" src="./js/marked.js"></script>
+		<script type="text/javascript" src="./js/geminiblog.js"></script>
+		<script type="text/javascript" src="./js/config.js"></script>
+	</head>
+
+	<body>
+
+		<div id="content-wrapper">
+
+		<!-- ######################################################## -->
+		<!-- Header ################################################# -->
+		<!-- ######################################################## -->
+
+			<header>
+				<h1 style="font-size: 2.55em; font-weight: 300; margin:0; margin-left: 0.5em; padding-bottom:0.05em;">
+					<a href="" style="color: #39C; text-decoration: none; /*text-shadow: 2px 5px 2px #000;*/">
+						<!--script>document.write(blogName);</script-->
+						gemini<b style="color: #FFFFFF; text-shadow:  0px 2px 1px #000;">Blog</b>
+					</a>
+				</h1>
+			</header>
+
+
+		<!-- ######################################################## -->
+		<!-- Aside ################################################## -->
+		<!-- ######################################################## -->
+
+			<aside class="center">
+				<h4 class="left"><a class="navIcons" href="#">Home<!-- &raquo;--></a></h4>
+				<div id="sidebar-wrapper">
+					<!--handled by listView()-->
+				</div>
+				<h4 class="left"><a class="navIcons" href="#archive">Archive<!-- &raquo;--></a></h4>
+				<h4 class="left"><a class="navIcons" href="#tags">Tags<!-- &raquo;--></a></h4>
+			</aside>
+
+		<!-- ######################################################## -->
+		<!-- Section ################################################ -->
+		<!-- ######################################################## -->
+
+			<section class="">
+				<noscript> You need Javascript enabled in the browser to get this to work.</noscript>
+				<div id="entries-wrapper">
+					<!--handled by either snippetView() or detailsView()-->
+				</div>
+				<!--div id="showMore" class="center full-width">
+					<a id="btn-showMore" href="#" onclick="showArchive()">More</a>
+				</div-->
+			</section>
+
+		<!-- ######################################################## -->
+		<!-- Footer ################################################# -->
+		<!-- ######################################################## -->
+
+			<footer class="clear full-width center">
+				<script>
+					document.write("<p>" + "&copy; " + author+" "+(new Date().getFullYear()) + "</p>");
+				</script>
+				<a class="contact" id="contact_homepage"><img class="contacticon" src="./images/icons/iconmonstr-home-5-icon.svg" alt="homepage"/></a>
+				<a class="contact" id="contact_mailme"><img class="contacticon" src="./images/icons/iconmonstr-email-10-icon.svg" alt="mail"/></a>
+				<a class="contact" id="contact_github"><img class="contacticon" src="./images/icons/iconmonstr-github-5-icon.svg" alt="github"/></a>
+				<a class="contact" id="contact_linkedin"><img class="contacticon" src="./images/icons/iconmonstr-linkedin-5-icon.svg" alt="linkedin"/></a>
+				<a class="contact" id="contact_twitter"><img class="contacticon" src="./images/icons/iconmonstr-twitter-5-icon.svg" alt="twitter"/></a>
+				<script>
+					//assign values to contact links
+					contactLinkMaker();
+				</script>
+			</footer>
+		</div>
+	</body>
+</html>
