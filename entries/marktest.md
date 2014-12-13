@@ -1,7 +1,7 @@
 #Markdown test
 
 This is an example entry for testing the display of the entries, as well as showing what you can actually do with markdown.
-You can download the markdown text version [here](./entries/example01.md) for comparison.
+You can download the markdown text version [here](./entries/marktest.md) for comparison.
 
 [This is actually a null link, but is how you add a comment]: <>
 [This will not show up in the converted html]: <>
