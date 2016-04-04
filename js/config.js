@@ -184,9 +184,6 @@ function closeMenusOnResize() {
 window.addEventListener('resize', closeMenusOnResize, false);
 toggle.addEventListener('click', toggleMenu, false);
 
-
-
-//-- Process the search form request
 function submit_it() {
     var anchor = document.location.hash.substring(2).toLowerCase();
     if (anchor !== "") {
@@ -195,3 +192,6 @@ function submit_it() {
         document.location.href = "#!search";
     }
 };
+
+//-- Process the search form request
+document.getElementById("submitfutton").addEventListener('click', submit_it, false);

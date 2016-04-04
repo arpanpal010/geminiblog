@@ -184,6 +184,14 @@
             "</div>"
         ].join(''),
 
+        searchNoResultsTemplate : [
+            "<div class='oh-search-snap'>",
+                "<div class='alert alert-dismissible alert-danger'>",
+                    "<p>Oh snap! There is no such blog post.</p>",
+                "</div>",
+            "</div>"
+        ].join(''),
+
     }
     // !-- -------------------------------------------------------- -->
     // !-- Functions												-->
@@ -515,12 +523,20 @@
     }
     geminiBlog.searchView = function() {
         var container = utils.clearElements($(geminiBlog.containerDiv));
+        var foundPosts = false;
 
         geminiBlog.entries.forEach(function(entry) {
-            if (entry.title.toLowerCase().match(document.getElementById("uzer-infut").value)) {
+            if (entry.title.toLowerCase().match(
+                        document.getElementById("uzer-infut").value.toLowerCase())) {
                 container.appendChild(geminiBlog.createArchiveHtml(entry));
+                foundPosts = true;
             }
         });
+
+        if (!foundPosts) {
+            var snippetViewHTML = utils.str2WrappedDOMElement(geminiBlog.templates.searchNoResultsTemplate);
+            container.appendChild(snippetViewHTML.childNodes[0]);
+        }
 
         geminiBlog.showRecentPosts();
     }
