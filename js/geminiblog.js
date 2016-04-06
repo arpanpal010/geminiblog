@@ -10,19 +10,6 @@
     var $$ = function(selector, rootNode) {
         return Array.prototype.slice.call((rootNode || document).querySelectorAll(selector));
     };
-    // // binding models to views
-    // var bindModelToView = function(obj, oprop, el, eprop) {
-    //	eprop = eprop || 'value'; // for inputs
-    //	Object.defineProperty(obj, prop, {
-    //		get: function() {
-    //			return el[eprop];
-    //		},
-    //		set: function(v) {
-    //			el[eprop] = v;
-    //		},
-    //		configurable: true,
-    //	})
-    // };
     var utils = {
         escapeRegExp: function(string) { // escape regex
             return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
@@ -101,12 +88,9 @@
     // !-- -------------------------------------------------------- -->
     // global var
     var geminiBlog = {
-        blogName: "Aaron's Blog",
-        archiveTitle    : "Archive",
-        author			: {
-            name		: "Aaron",
-            fullName	: "Aaron Caffrey",
-        },
+        blogTitle       : "Blog",       // blog title
+        archiveTitle    : "Archive",    // archive title
+        author			: "John Doe",   // post author
         entries			: [],			// holds meta of all entries
         freshNumber		: 7,			// how many entries to show in snippets
         templates		: [],			// for all templates
@@ -150,13 +134,13 @@
                 "<div class='details-head'>",
                     "<div class='details-head-wrapper'>",
                         "<span class='details-separator'> » </span>",
-                        "<a class='details-title'></a>",
-                        "<span class='details-date'></span>",
+                        "<span class='details-date label label-default'></span>",
                     "</div>",
                 "</div>",
                 "<div class='details-body'>",
                 "</div>",
                 "<div class='details-footer'>",
+                    "<hr></hr>",
                     "<div class='markdown-source'>",
                         "( The source markdown file for this entry can be found <a id='md-src'>Here</a> )",
                     "</div>",
@@ -186,8 +170,8 @@
 
         searchNoResultsTemplate : [
             "<div class='oh-search-snap'>",
-                "<div class='alert alert-dismissible alert-danger'>",
-                    "<p>Oh snap! There is no such blog post.</p>",
+                "<div class='alert alert-dismissible alert-info'>",
+                    "<p>Nothing found.</p>",
                 "</div>",
             "</div>"
         ].join(''),
@@ -338,7 +322,6 @@
         $('.entry-content', wrapper).innerHTML = entry.snippetHtml;
 
         // console.log(snippetViewHTML.innerHTML);
-        // console.log(entry);
         // return inner dom
         return snippetViewHTML.childNodes[0];
     }
@@ -348,16 +331,18 @@
         var head = $('.details-head-wrapper', detailsViewHTML);
 
         //set title
-        $('.details-title', head).setAttribute("href", "#!post=" + entry.id);
-        $('.details-title', head).setAttribute("id", entry.id);
-        $('.details-title', head).textContent = entry.title;
-        $('.details-date', head).textContent = " added on " + entry.pubDate.toLocaleDateString();
+        //$('.details-title', head).setAttribute("href", "#!post=" + entry.id);
+        $('.details-date', head).setAttribute("id", entry.id);
+        //$('.details-title', head).textContent = entry.title;
+        $('.details-date', head).textContent = "Posted by " + geminiBlog.author +
+            " on " + entry.pubDate.toLocaleDateString();
 
         //set content
         $('.details-body', detailsViewHTML).innerHTML = entry.html;
 
         //footer
         var footer = $('.details-footer', detailsViewHTML);
+
         //markdown source
         if(geminiBlog.markDownloads) {
             $('#md-src', footer).setAttribute('href', entry.url);
@@ -403,31 +388,18 @@
         $('.post-title-url', head).textContent = (entry.title.length > 35) ? entry.title.slice(0, 35) + "...": entry.title;
         $('.post-date', head).textContent = entry.pubDate.toLocaleDateString();
 
-
-        // if (!entry.archiveHtml) {
-        //	entry.archiveHtml = geminiBlog.mdToHTML(entry.text.slice(0, sliceAmount) + "&hellip;");
-        // }
-        // $('.archive-body', wrapper).innerHTML = entry.archiveHtml;
-
-        // console.log(archiveViewHTML.innerHTML);
-        // console.log(entry);
         // return inner dom
         return archiveViewHTML.childNodes[0];
     }
 
     // shows a subsection of entries in snippet mode, heading + a partial of content + meta
     geminiBlog.snippetView = function(entries, containerClass, sliceLength) {
-        document.title = geminiBlog.blogName;
+        document.title = geminiBlog.blogTitle;
         // You must have >= md posts than geminiBlog.freshNumber
         entries = entries || geminiBlog.entries.slice(0, geminiBlog.freshNumber);
         sliceLength = sliceLength || geminiBlog.freshNumber - 1;
         var container = utils.clearElements($(containerClass || geminiBlog.containerDiv));
 
-        // var event = utils.registerEvent('new-entry-fetched', true, true);
-        // utils.registerListener(document, 'new-entry-fetched', function(e) {
-        //	   console.log("Loaded entry: " + e.data.index + ": " + e.data.title + " " + e.data.pubDate.toLocaleDateString());
-        //	   container.appendChild(geminiBlog.createSnippet(e.data));
-        // })
         entries.forEach(function(entry, index) {
             // fetch entry and process
             if (!entry.text) {
@@ -482,7 +454,6 @@
             // scroll(0,posTop); // scroll to top after the entry loads, set the px value in config depending on header height
             // scroll upto entry.id anchor, markdown heading is just below
             document.getElementById(entry.id).scrollIntoView(true);
-
         }
 
         // fetch entry and process
@@ -522,6 +493,7 @@
         geminiBlog.showRecentPosts();
     }
     geminiBlog.searchView = function() {
+        document.title = geminiBlog.searchTitle;
         var container = utils.clearElements($(geminiBlog.containerDiv));
         var foundPosts = false;
 
@@ -539,6 +511,13 @@
         }
 
         geminiBlog.showRecentPosts();
+    }
+
+    geminiBlog.submitIt = function() {
+        var anchor = document.location.hash.substring(2).toLowerCase();
+            anchor === "search" ?
+                geminiBlog.searchView() :
+                document.location.href = "#!search";
     }
 
     geminiBlog.router = function() {
@@ -583,11 +562,41 @@
         geminiBlog.router();
         utils.registerListener(w, 'hashchange', geminiBlog.router);
     }
+
+    // Bootstrap dropdown menu without jquery
+    var daMenus = {
+
+        // Navbar and dropdowns
+        toggle: document.getElementsByClassName('navbar-toggle')[0],
+        collapse: document.getElementsByClassName('navbar-collapse')[0],
+
+        toggleMenu: function() { // Toggle if navbar menu is open or closed
+            daMenus.collapse.classList.toggle('collapse');
+        },
+
+        // Close dropdowns when screen becomes big enough to switch to open by hover
+        closeMenusOnResize: function() {
+            if (document.body.clientWidth >= 768) {
+                daMenus.collapse.classList.add('collapse');
+            }
+        },
+    };
+
+
     // !-- -------------------------------------------------------- -->
-    // !-- Start													-->
+    // !-- Start the event listeners								-->
     // !-- -------------------------------------------------------- -->
     // fire geminiBlog.init() after page load or if the anchor changes
     utils.registerListener(w, 'load', geminiBlog.init);
+
+    // search form
+    document.getElementById('uzer-infut').addEventListener('input', geminiBlog.submitIt, false);
+    document.getElementById('submitfutton').addEventListener('click', geminiBlog.submitIt, false);
+
+    // dropdown menus
+    utils.registerListener(w, 'resize', daMenus.closeMenusOnResize);
+    daMenus.toggle.addEventListener('click', daMenus.toggleMenu, false);
+
     // debug
     w['geminiBlog'] = geminiBlog;
 
