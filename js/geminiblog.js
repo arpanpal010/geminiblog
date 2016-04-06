@@ -88,11 +88,13 @@
     // !-- -------------------------------------------------------- -->
     // global var
     var geminiBlog = {
-        blogTitle       : "Blog",       // blog title
-        archiveTitle    : "Archive",    // archive title
+        blogTitle       : "Blog",       // main page title
+        archiveTitle    : "Archive",    // archive page title
+        searchTitle     : "Search",     // search page title
         author			: "John Doe",   // post author
         entries			: [],			// holds meta of all entries
-        freshNumber		: 7,			// how many entries to show in snippets
+        frontPosts		: 7,			// how many entries to show in snippets
+        recentPosts     : 7,            // how many recent posts to show
         templates		: [],			// for all templates
         variables		: [],			// for all variables in posts
         variablePrefix	: '{|',			// {|this|} is a variable
@@ -121,11 +123,7 @@
 
         RecentPostsTemplate : [
             "<div class='recent-posts-wrapper'>",
-                "<div class='blah-blah'>",
-                    "<a class='list-group-item'>",
-                    "<span class='badge'></span>",
-                    "</a>",
-                "</div>",
+                "<a class='list-group-item'></a>",
             "</div>"
         ].join(''),
 
@@ -293,11 +291,9 @@
         wrapper.setAttribute('id', entry.id)
         //wrapper.setAttribute("onclick", "document.location.href = '#!post=" + entry.id + "'");
 
-        var head = $('.blah-blah', wrapper);
-
         //set title
-        $('.list-group-item', head).setAttribute("href", "#!post=" + entry.id);
-        $('.list-group-item', head).textContent = (entry.title.length > 35) ? entry.title.slice(0, 35) + "...": entry.title;
+        $('.list-group-item', wrapper).setAttribute("href", "#!post=" + entry.id);
+        $('.list-group-item', wrapper).textContent = (entry.title.length > 35) ? entry.title.slice(0, 35) + "...": entry.title;
 
         return snippetViewHTML.childNodes[0];
 
@@ -395,9 +391,8 @@
     // shows a subsection of entries in snippet mode, heading + a partial of content + meta
     geminiBlog.snippetView = function(entries, containerClass, sliceLength) {
         document.title = geminiBlog.blogTitle;
-        // You must have >= md posts than geminiBlog.freshNumber
-        entries = entries || geminiBlog.entries.slice(0, geminiBlog.freshNumber);
-        sliceLength = sliceLength || geminiBlog.freshNumber - 1;
+        entries = entries || geminiBlog.entries.slice(0, geminiBlog.frontPosts);
+        sliceLength = sliceLength || geminiBlog.frontPosts - 1;
         var container = utils.clearElements($(containerClass || geminiBlog.containerDiv));
 
         entries.forEach(function(entry, index) {
@@ -435,7 +430,7 @@
         geminiBlog.showRecentPosts();
     }
     geminiBlog.showRecentPosts = function() {
-        var entries = geminiBlog.entries.slice(0, geminiBlog.freshNumber);
+        var entries = geminiBlog.entries.slice(0, geminiBlog.recentPosts);
         var recent_container = utils.clearElements($(geminiBlog.recentDiv));
 
         entries.forEach(function(entry) {

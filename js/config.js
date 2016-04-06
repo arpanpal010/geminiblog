@@ -1,11 +1,13 @@
-//-- ######################################################## -->
-
+/* **************************************************************
+ *         Important configration
+ * *************************************************************/
     geminiBlog.author = "Aaron";           // posts author
-    geminiBlog.blogTitle = "Aaron's Blog"; // front page title
+    geminiBlog.blogTitle = "Aaron's Blog"; // main page title
     geminiBlog.archiveTitle = "Archive";   // archive page title
     geminiBlog.searchTitle = "Search";     // search page title
 
-    geminiBlog.freshNumber = 7;            // default posts to display
+    geminiBlog.frontPosts = 7;             // Number of posts on front page
+    geminiBlog.recentPosts = 7;           // Number of recent posts [sidebar]
 
     //trim each post on front page after X chars
     geminiBlog.snippetLength = 170;
@@ -16,15 +18,11 @@
     //enable markdown sources to be downloaded
     geminiBlog.markDownloads = true;
 
-//-- ######################################################## -->
-
-
-// register new entries here
-// "./file.md", "Post title", "April 01, 2016"
-
-//-- ######################################################## -->
-
-
+/* **************************************************************
+ *           register new entries below
+ *      filename,      title            date
+ *     "./file.md", "Post title", "April 01, 2016"
+ * *************************************************************/
 
     geminiBlog.registerEntry("./nas_cloud.md", "The home: NAS or cloud. Have both.", "March 30, 2016");
     geminiBlog.registerEntry("./new_goodies.md", "New goodies", "September 03, 2015");
@@ -36,12 +34,10 @@
     geminiBlog.registerEntry("./torchlight2_segfaults.md", "Torchlight 2 segfaults", "July 14, 2015");
     geminiBlog.registerEntry("./boot_loader_encryption.md", "Boot loader encryption", "June 20, 2015");
 
+/* **************************************************************
+ *         Advanced customizations
+ * *************************************************************/
 
-//-- ######################################################## -->
-
-// Advanced customizations
-
-//-- ######################################################## -->
     geminiBlog.repoBase = "./markdown/"; //remember the ending slash
     geminiBlog.useAsync = true; // enable when being served
     geminiBlog.timeout = 10000; //milliseconds after which an async request 404s
