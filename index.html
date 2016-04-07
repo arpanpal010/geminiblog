@@ -60,6 +60,7 @@
       </div><!--/.container-->
     </div><!--/.navbar-default-->
 
+    <!--blog content-->
     <div class="container">
         <div id="content">
           <div class="row">
@@ -75,16 +76,33 @@
             </div><!--/.page-content-->
 
             <!--right column-->
-            <div class="sidebar col-md-3">
-              <section class="panel panel-default">
-                <div class="panel-heading">
-                  <h3 class="panel-title">Recent Posts</h3>
-                </div>
-                <div class="list-group">
-                  <div id="recent-posts"></div><!--recent posts composition tag-->
-                </div>
-              </section>
-            </div><!--/.sidebar-->
+              <div class="sidebar col-md-3">
+
+                <!-- recent posts sidebar -->
+                <div id="recentBar"><!--hides the recent posts-->
+                  <section class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Recent Posts</h3>
+                    </div>
+                    <div class="list-group">
+                      <div id="recent-posts"></div><!--recent posts composition tag-->
+                    </div>
+                  </section>
+                </div><!-- recentBar -->
+
+                <!-- categories sidebar -->
+                <div id="CategoriesBar"><!--hides the categories-->
+                  <section class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Categories</h3>
+                    </div>
+                    <div class="list-group">
+                        <div id="tags-div"></div><!--categories composition tag-->
+                    </div>
+                  </section>
+                </div><!-- CategoriesBar -->
+
+               </div><!--/.sidebar-->
 
           </div><!--/.row-->
         </div><!--/.content-->

@@ -5,9 +5,12 @@
     geminiBlog.blogTitle = "Aaron's Blog"; // main page title
     geminiBlog.archiveTitle = "Archive";   // archive page title
     geminiBlog.searchTitle = "Search";     // search page title
+    geminiBlog.categoriesTitle = "Categories"; // categories page title
 
     geminiBlog.frontPosts = 7;             // Number of posts on front page
-    geminiBlog.recentPosts = 7;           // Number of recent posts [sidebar]
+    geminiBlog.recentPosts = 7;            // Number of recent posts [sidebar]
+    geminiBlog.showRecentBar = true;       // Show/hide the recent posts sidebar
+    geminiBlog.showCategories = true;      // Show/hide the categories sidebar
 
     //trim each post on front page after X chars
     geminiBlog.snippetLength = 170;
@@ -20,19 +23,23 @@
 
 /* **************************************************************
  *           register new entries below
- *      filename,      title            date
- *     "./file.md", "Post title", "April 01, 2016"
+ *      filename,      title            date          Category [lowercase]
+ *     "./file.md", "Post title", "April 01, 2016", "encryption"
  * *************************************************************/
 
-    geminiBlog.registerEntry("./nas_cloud.md", "The home: NAS or cloud. Have both.", "March 30, 2016");
-    geminiBlog.registerEntry("./new_goodies.md", "New goodies", "September 03, 2015");
-    geminiBlog.registerEntry("./switching_from_archlinux_to_gentoo.md", "Switching from Archlinux to FreeBSD then Gentoo", "August 29, 2015");
-    geminiBlog.registerEntry("./dwm_to_xmonad.md", "Switching from dwm to xmonad", "August 15, 2015");
-    geminiBlog.registerEntry("./custom_repo_with_signed_packages.md", "Custom repo with signed packages", "August 15, 2015");
-    geminiBlog.registerEntry("./random_cpu_spikes.md", "Random CPU spikes", "August 01, 2015");
-    geminiBlog.registerEntry("./encrypted_chat_with_otr.md", "Encrypted chat with OTR", "July 31, 2015");
-    geminiBlog.registerEntry("./torchlight2_segfaults.md", "Torchlight 2 segfaults", "July 14, 2015");
-    geminiBlog.registerEntry("./boot_loader_encryption.md", "Boot loader encryption", "June 20, 2015");
+
+
+    geminiBlog.registerEntry("./nas_cloud.md", "The home: NAS or cloud. Have both.", "March 30, 2016", "nas");
+    geminiBlog.registerEntry("./new_goodies.md", "New goodies", "September 03, 2015", "nas");
+    geminiBlog.registerEntry("./switching_from_archlinux_to_gentoo.md", "Switching from Archlinux to FreeBSD then Gentoo", "August 29, 2015", "bsd,archlinux,gentoo");
+    geminiBlog.registerEntry("./dwm_to_xmonad.md", "Switching from dwm to xmonad", "August 15, 2015", "xmonad,archlinux");
+    geminiBlog.registerEntry("./custom_repo_with_signed_packages.md", "Custom repo with signed packages", "August 15, 2015", "");
+    geminiBlog.registerEntry("./random_cpu_spikes.md", "Random CPU spikes", "August 01, 2015", "cpu");
+    geminiBlog.registerEntry("./encrypted_chat_with_otr.md", "Encrypted chat with OTR", "July 31, 2015", "");
+    geminiBlog.registerEntry("./torchlight2_segfaults.md", "Torchlight 2 segfaults", "July 14, 2015", "");
+    geminiBlog.registerEntry("./boot_loader_encryption.md", "Boot loader encryption", "June 20, 2015", "");
+
+
 
 /* **************************************************************
  *         Advanced customizations
@@ -71,12 +78,6 @@
         {name : "img" , value : "https://wifiextender.github.io/img/file"},
     ];
 
-//-- ######################################################## -->
-
-//divs used in compositing the page
-//don't touch unless you know what u doin
-    geminiBlog.containerDiv = "#entries-wrapper";
-    geminiBlog.recentDiv = "#recent-posts";
 
 //-- ######################################################## -->
 

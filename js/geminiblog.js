@@ -91,10 +91,15 @@
         blogTitle       : "Blog",       // main page title
         archiveTitle    : "Archive",    // archive page title
         searchTitle     : "Search",     // search page title
+        categoriesTitle : "Categories",  // categories page title
         author			: "John Doe",   // post author
         entries			: [],			// holds meta of all entries
         frontPosts		: 7,			// how many entries to show in snippets
         recentPosts     : 7,            // how many recent posts to show
+        showRecentBar   : true,         // Show/hide the recent posts sidebar
+        showCategories  : true,         // Show/hide the categories sidebar
+        CategoriesEmpty : true,         // don't touch <----------!
+        tags            : [],           // da tags list
         templates		: [],			// for all templates
         variables		: [],			// for all variables in posts
         variablePrefix	: '{|',			// {|this|} is a variable
@@ -116,8 +121,8 @@
                 "<h2 class='entry-title'>",
                     "<a class='snippet-title'></a>",
                 "</h2>",
-                "<div class='entry-content'>",
-                "</div>",
+                "<div class='entry-content'></div>",
+                "<hr></hr>",
             "</div>"
         ].join(''),
 
@@ -174,17 +179,34 @@
             "</div>"
         ].join(''),
 
+        tagViewTemplate : [
+            "<article class='tags-box'>",
+                "<div class='tags-container'>",
+                    "<div class='tags-wrapper'>",
+                        "<a class='tags-title'></a>",
+                        "<span class='tags-strength'></span>",
+                    "</div>",
+                "</div>",
+            "</article>"
+        ].join(''),
+
+        tagTemplate : [
+                "<div class='tags-wrapper'>",
+                    "<a class='list-group-item'></a>",
+            "</div>",
+        ].join(''),
     }
     // !-- -------------------------------------------------------- -->
     // !-- Functions												-->
     // !-- -------------------------------------------------------- -->
-    geminiBlog.registerEntry = function(entryUrl, title, pubDate) { // required entryUrl
+    geminiBlog.registerEntry = function(entryUrl, title, pubDate, tags) { // required entryUrl
         // register the .md file as an entry and add it to geminiBlog.entries
         var pd = new Date(pubDate) || null;
         title = title || entryUrl;
         var id = title.replace('.md', '').replace(/[^a-z0-9]/gi, '-').toLowerCase();
         // if url begins with ./ replace it with repoBase, else leave as is and consider as full url
         var eurl = (entryUrl.slice(0, 2) === "./") ? geminiBlog.repoBase + entryUrl.slice(2) : entryUrl;
+        var tags_clean = tags.replace(" ", "").split(",");
 
         // create the entry object
         var entry = { // properties of each entry
@@ -193,8 +215,21 @@
             url: eurl,
             title: title,
             pubDate: pd,
+            tags: tags_clean,
         };
+
         geminiBlog.entries.push(entry);
+
+        if (tags && tags !== "") {
+            geminiBlog.CategoriesEmpty = false;
+            // push tag in tags_clean to geminiBlog.tags if not already in
+            // accepts tagname= "Unatagged" useful in searching entries without tags
+            for (var i = 0; i < tags_clean.length; i++) {
+                if (geminiBlog.tags.indexOf(tags_clean[i]) == - 1) {
+                    geminiBlog.tags.push(tags_clean[i]);
+                }
+            }
+        }
     };
     // sort list by a key - default: pubDate
     geminiBlog.sortEntries = function(key, elist, reverse) {
@@ -246,6 +281,24 @@
         // alert(geminiBlog.entries[i].id+" "+eid);
         return false;
     }
+    // find entries by tag
+    geminiBlog.getEntriesByTag = function(tag) {
+        if (geminiBlog.entries.length === 0) {
+            return false;
+        }
+        if (geminiBlog.entries.length === 1) {
+            return geminiBlog.entries[0];
+        }
+        var tagged_entries = [];
+
+        for (var i in geminiBlog.entries) {
+            var entry = geminiBlog.entries[i];
+            if (entry.tags.indexOf(tag) !== - 1) {
+                tagged_entries.push(entry);
+            }
+        }
+        return (tagged_entries.length > 0) ? tagged_entries: false;
+    }
     // markdown to html conversion function with variable replacement
     /* markdown2html parser https://github.com/chjj/marked/ */
     if (w.marked) {
@@ -288,7 +341,7 @@
     geminiBlog.createRecentPosts = function(entry) {
         var snippetViewHTML = utils.str2WrappedDOMElement(geminiBlog.templates.RecentPostsTemplate);
         var wrapper = $('.recent-posts-wrapper', snippetViewHTML);
-        wrapper.setAttribute('id', entry.id)
+        wrapper.setAttribute('id', entry.id);
         //wrapper.setAttribute("onclick", "document.location.href = '#!post=" + entry.id + "'");
 
         //set title
@@ -393,7 +446,7 @@
         document.title = geminiBlog.blogTitle;
         entries = entries || geminiBlog.entries.slice(0, geminiBlog.frontPosts);
         sliceLength = sliceLength || geminiBlog.frontPosts - 1;
-        var container = utils.clearElements($(containerClass || geminiBlog.containerDiv));
+        var container = utils.clearElements($(containerClass || "#entries-wrapper"));
 
         entries.forEach(function(entry, index) {
             // fetch entry and process
@@ -409,7 +462,8 @@
 
                         //create and add snippet
                         //console.log("Loaded entry: " + entry.index + ": " + entry.title + " " + entry.pubDate.toLocaleDateString());
-                        if (index < sliceLength) container.appendChild(geminiBlog.createSnippet(entry));
+                        if (index === sliceLength) {return;}
+                        container.appendChild(geminiBlog.createSnippet(entry));
 
                         // dispatch event
                         // event.data = entry;
@@ -424,22 +478,28 @@
             } else {
                 //create and add snippet
                 //console.log("Found entry: " + entry.index + ": " + entry.title + " " + entry.pubDate.toLocaleDateString());
-                if (index < sliceLength) container.appendChild(geminiBlog.createSnippet(entry));
+                if (index === sliceLength) {return;}
+                container.appendChild(geminiBlog.createSnippet(entry));
             }
         });
         geminiBlog.showRecentPosts();
+        geminiBlog.showTags();
     }
     geminiBlog.showRecentPosts = function() {
-        var entries = geminiBlog.entries.slice(0, geminiBlog.recentPosts);
-        var recent_container = utils.clearElements($(geminiBlog.recentDiv));
+        if (geminiBlog.showRecentBar) {
+            var entries = geminiBlog.entries.slice(0, geminiBlog.recentPosts);
+            var recent_container = utils.clearElements($("#recent-posts"));
 
-        entries.forEach(function(entry) {
-            recent_container.appendChild(geminiBlog.createRecentPosts(entry));
-        });
+            entries.forEach(function(entry) {
+                recent_container.appendChild(geminiBlog.createRecentPosts(entry));
+            });
+        } else {
+            utils.hide($('#recentBar'));
+        }
     }
     geminiBlog.detailsView = function(entry, containerClass) {
         document.title = entry.title;
-        var container = utils.clearElements($(containerClass || geminiBlog.containerDiv));
+        var container = utils.clearElements($(containerClass || "#entries-wrapper"));
 
         var detailsViewInstructions = function(entry) {
             //create and add snippet
@@ -477,19 +537,50 @@
             detailsViewInstructions(entry);
         }
         geminiBlog.showRecentPosts();
+        geminiBlog.showTags();
     }
-    geminiBlog.archiveView = function(containerClass) {
-        document.title = geminiBlog.archiveTitle;
-        var container = utils.clearElements($(containerClass || geminiBlog.containerDiv));
+    geminiBlog.archiveView = function(givenArr, windowTitle) {
+        document.title = windowTitle || geminiBlog.archiveTitle;
+        var container = utils.clearElements($("#entries-wrapper"));
+        var entries = givenArr || geminiBlog.entries;
 
-        geminiBlog.entries.forEach(function(entry) {
+        entries.forEach(function(entry) {
             container.appendChild(geminiBlog.createArchiveHtml(entry));
         });
         geminiBlog.showRecentPosts();
+        geminiBlog.showTags();
     }
+
+    geminiBlog.showTags = function() {
+        if (geminiBlog.showCategories && !geminiBlog.CategoriesEmpty) {
+            var entries = geminiBlog.tags;
+            var tagsContainer = utils.clearElements($("#tags-div"));
+
+            entries.forEach(function(entry) {
+                tagsContainer.appendChild(geminiBlog.createTagsView(entry));
+            });
+        } else {
+            utils.hide($('#CategoriesBar'));
+        }
+    }
+
+    geminiBlog.createTagsView = function(tag) {
+        var snippetViewHTML = utils.str2WrappedDOMElement(geminiBlog.templates.tagTemplate);
+        var wrapper = $('.tags-wrapper', snippetViewHTML);
+        wrapper.setAttribute('id', tag)
+        wrapper.setAttribute("onclick", "document.location.href = '#!tag=" + tag + "'");
+
+        //category href and "badge" to show how many entires are in it
+        $('.list-group-item', wrapper).setAttribute("href", "#!tag=" + tag);
+        $('.list-group-item', wrapper).innerHTML = tag + "<span class='badge'>" +
+            geminiBlog.getEntriesByTag(tag).length + "</span>";
+
+        return snippetViewHTML.childNodes[0];
+    }
+
     geminiBlog.searchView = function() {
         document.title = geminiBlog.searchTitle;
-        var container = utils.clearElements($(geminiBlog.containerDiv));
+        var container = utils.clearElements($("#entries-wrapper"));
         var foundPosts = false;
 
         geminiBlog.entries.forEach(function(entry) {
@@ -506,6 +597,7 @@
         }
 
         geminiBlog.showRecentPosts();
+        geminiBlog.showTags();
     }
 
     geminiBlog.submitIt = function() {
@@ -536,6 +628,15 @@
                 }
                 break;
 
+                // parse tags by regex
+                case (/^tag=(.*)/.test(anchor)):
+                    if (anchor.match(/^tag=(.*)/)[1]) {
+                    return geminiBlog.archiveView(geminiBlog.getEntriesByTag(anchor.match(/^tag=(.*)/)[1]), geminiBlog.categoriesTitle);
+                } else {
+                    document.location.href = "#!frontpage";
+                }
+                break;
+
                 default:
                     document.location.href = "#!frontpage";
                 break;
@@ -550,6 +651,7 @@
     geminiBlog.init = function() {
         // sort the lists
         geminiBlog.sortEntries("pubDate", geminiBlog.entries, false);
+        geminiBlog.tags.sort();
 
         // populate sidebar with a list of entries - comment this out if sidebar is hidden
         // listView();
@@ -576,7 +678,6 @@
             }
         },
     };
-
 
     // !-- -------------------------------------------------------- -->
     // !-- Start the event listeners								-->
