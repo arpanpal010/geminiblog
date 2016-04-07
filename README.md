@@ -5,7 +5,7 @@ Typical static blogs: write the post, initialize the **X** static blog generator
 In comparison geminiblog: write the post, register it in `js/config.js`
 
 ```javascript
-register("./marktest.md", "Markdown Test", "December 10, 2014");
+register("./marktest.md", "Markdown Test", "December 10, 2014", "category");
 ```
 
 and push your markdown post + config.js, that's all. All the magic (post convertion, rendering, etc) happens in your blog visitors browser.
@@ -15,11 +15,11 @@ There are no server/client side requirements, except html and javascript.
 This is a fork of [geminiblog](https://github.com/arpanpal010/geminiblog) and I have improved it to:
 
 - [x] Be always mobile compatible by using the bootstrap framework. You can easily swap bootstrap themes, all you have to do is point the new theme in **index.html**, it's that simple.
-- [x] Display Recent Posts sidebar in every page.
-- [x] Download small number of markdown posts whenever the main blog page is loaded. The archive page and search form doesn't download any markdown posts.
+- [x] Display Recent Posts and Categories sidebar in every page.
+- [x] Download small number of markdown posts whenever the main blog page is loaded for very first time.
 - [x] Set window title according to the requested page.
 - [x] Include syntax highlighting while your blog posts remain written in markdown (see it in action [1](https://wifiextender.github.io/#!post=switching-from-archlinux-to-freebsd-then-gentoo) and [2](https://wifiextender.github.io/#!post=install-owncloud-with-ssl-and-nginx-in-centos--version-3-)). The highlighting script and highlighting languages are crammed and minified in single file.
-- [x] Easily enable/disable prevnextLinks in `config.js`, if you don't want <-previous next-> button links.
+- [x] Easily enable/disable things in `config.js`.
 - [x] Make use of CDN with integrity checks
 - [x] Include in-house search form. It parses your blog post titles, the one that you register in **js/config.js**.
 
