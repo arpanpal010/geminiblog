@@ -195,7 +195,7 @@
         var id = title.replace('.md', '').replace(/[^a-z0-9]/gi, '-').toLowerCase();
         // if url begins with ./ replace it with repoBase, else leave as is and consider as full url
         var eurl = (entryUrl.slice(0, 2) === "./") ? geminiBlog.repoBase + entryUrl.slice(2) : entryUrl;
-        var tags_clean = tags.replace(" ", "").split(",");
+        var tags_clean = tags.toLowerCase().replace(" ", "").split(",");
 
         // create the entry object
         var entry = { // properties of each entry
@@ -561,7 +561,7 @@
 
         //category href and "badge" to show how many entires are in it
         $('.list-group-item', wrapper).setAttribute("href", "#!tag=" + tag);
-        $('.list-group-item', wrapper).innerHTML = tag + "<span class='badge'>" +
+        $('.list-group-item', wrapper).innerHTML = utils.capFirst(tag) + "<span class='badge'>" +
             geminiBlog.getEntriesByTag(tag).length + "</span>";
 
         return snippetViewHTML.childNodes[0];

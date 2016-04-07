@@ -23,7 +23,7 @@
 
 /* **************************************************************
  *           register new entries below
- *      filename,      title            date          Category [lowercase]
+ *      filename,      title            date          Category
  *     "./file.md", "Post title", "April 01, 2016", "encryption"
  * *************************************************************/
 
@@ -32,7 +32,7 @@
     geminiBlog.registerEntry("./nas_cloud.md", "The home: NAS or cloud. Have both.", "March 30, 2016", "nas");
     geminiBlog.registerEntry("./new_goodies.md", "New goodies", "September 03, 2015", "nas");
     geminiBlog.registerEntry("./switching_from_archlinux_to_gentoo.md", "Switching from Archlinux to FreeBSD then Gentoo", "August 29, 2015", "bsd,archlinux,gentoo");
-    geminiBlog.registerEntry("./dwm_to_xmonad.md", "Switching from dwm to xmonad", "August 15, 2015", "xmonad,archlinux");
+    geminiBlog.registerEntry("./dwm_to_xmonad.md", "Switching from dwm to xmonad", "August 15, 2015", "xmonad,Archlinux");
     geminiBlog.registerEntry("./custom_repo_with_signed_packages.md", "Custom repo with signed packages", "August 15, 2015", "");
     geminiBlog.registerEntry("./random_cpu_spikes.md", "Random CPU spikes", "August 01, 2015", "cpu");
     geminiBlog.registerEntry("./encrypted_chat_with_otr.md", "Encrypted chat with OTR", "July 31, 2015", "");
