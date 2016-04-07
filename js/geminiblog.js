@@ -179,17 +179,6 @@
             "</div>"
         ].join(''),
 
-        tagViewTemplate : [
-            "<article class='tags-box'>",
-                "<div class='tags-container'>",
-                    "<div class='tags-wrapper'>",
-                        "<a class='tags-title'></a>",
-                        "<span class='tags-strength'></span>",
-                    "</div>",
-                "</div>",
-            "</article>"
-        ].join(''),
-
         tagTemplate : [
                 "<div class='tags-wrapper'>",
                     "<a class='list-group-item'></a>",
