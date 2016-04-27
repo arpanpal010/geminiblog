@@ -40,3 +40,5 @@ python3 -m http.server
 visit 127.0.0.1:8000 to preview your blog.
 
 I've copied 9 of my blog posts in the markdown folder to make you more excited about geminiblog and how to write markdown posts.
+
+You can find even more customized version of this fork that drives my blog - [here](https://github.com/wifiextender/wifiextender.github.io).
