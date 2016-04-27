@@ -1,117 +1,99 @@
-//-- ######################################################## -->
-//-- Configurations ######################################### -->
-//-- ######################################################## -->
+/* **************************************************************
+ *         Important configration
+ * *************************************************************/
+    geminiBlog.author = "Aaron";           // posts author
+    geminiBlog.blogTitle = "Aaron's Blog"; // main page title
+    geminiBlog.archiveTitle = "Archive";   // archive page title
+    geminiBlog.searchTitle = "Search";     // search page title
+    geminiBlog.categoriesTitle = "Categories"; // categories page title
 
-	var blogName = "geminiBlog"; //uncomment the javascript in index.html : header section and remove other stylings
+    geminiBlog.frontPosts = 7;             // Number of posts on front page
+    geminiBlog.recentPosts = 7;            // Number of recent posts [sidebar]
+    geminiBlog.showRecentBar = true;       // Show/hide the recent posts sidebar
+    geminiBlog.showCategories = true;      // Show/hide the categories sidebar
 
-//-- ######################################################## -->
+    //trim each post on front page after X chars
+    geminiBlog.snippetLength = 170;
 
-	//info
-	var author = "Arpan Pal";
-	var contactLinks=[ //hide the url/id to hide displaying the item
-		{name: "homepage",
-			//url: "arpanpal010.github.io",
-			//id: "#",
-		},
-		{name: "mailme",
-			url: "mailto:arpan.pal010@gmail.com",
-		},
-		{name: "github",
-			url: "https://www.github.com/",
-			id: "arpanpal010",
-		},
-		{name: "linkedin",
-			url: "https://www.linkedin.com/in/arpanpal010",
-		},
-		{name: "twitter",
-			id: "arpanpal010",
-			url: "https://www.twitter.com/"
-		},
-	]
+    // previous and next blog post button links at the bottom of each post
+    geminiBlog.prevnextLinks = true;
 
-//-- ######################################################## -->
+    //enable markdown sources to be downloaded
+    geminiBlog.markDownloads = true;
 
-	//global definitions
-	var repoBase = "./entries/"; //remember the ending slash
-	var use_async = false; // enable when being served
-	var timeout = 4; //seconds after which an async request 404s
+/* **************************************************************
+ *           register new entries below
+ *      filename,      title            date          Category
+ *     "./file.md", "Post title", "April 01, 2016", "encryption"
+ * *************************************************************/
 
-	//divs used in compositing the page
-	var containerDiv = "entries-wrapper";
-	var sidebarDiv = "sidebar-wrapper";
 
-	var posTop = 80; //px value of top of entry, the page is scrolled to this amount everytime an entry is loaded
 
-	//default post to display
-	var freshNum = 7; //most recent entries to be displayed in default snippetView
-	var snippetLength = 240; //characters to display in snippet mode
+    geminiBlog.registerEntry("./nas_cloud.md", "The home: NAS or cloud. Have both.", "March 30, 2016", "nas");
+    geminiBlog.registerEntry("./new_goodies.md", "New goodies", "September 03, 2015", "nas");
+    geminiBlog.registerEntry("./switching_from_archlinux_to_gentoo.md", "Switching from Archlinux to FreeBSD then Gentoo", "August 29, 2015", "bsd,archlinux,gentoo");
+    geminiBlog.registerEntry("./dwm_to_xmonad.md", "Switching from dwm to xmonad", "August 15, 2015", "xmonad,Archlinux");
+    geminiBlog.registerEntry("./custom_repo_with_signed_packages.md", "Custom repo with signed packages", "August 15, 2015", "");
+    geminiBlog.registerEntry("./random_cpu_spikes.md", "Random CPU spikes", "August 01, 2015", "cpu");
+    geminiBlog.registerEntry("./encrypted_chat_with_otr.md", "Encrypted chat with OTR", "July 31, 2015", "");
+    geminiBlog.registerEntry("./torchlight2_segfaults.md", "Torchlight 2 segfaults", "July 14, 2015", "");
+    geminiBlog.registerEntry("./boot_loader_encryption.md", "Boot loader encryption", "June 20, 2015", "");
 
-	//markdown parsing options - passed to marked() in mdConvert()
-	var md_options = {
-		'gfm' : true,
-		'tables' : true,
-		'breaks' :false,
-		'pedantic' :false,
-		'sanitize' : true,
-		'smartlists' :true ,
-		'smartypants' :false,
-	}
+
+
+/* **************************************************************
+ *         Advanced customizations
+ * *************************************************************/
+
+    geminiBlog.repoBase = "./markdown/"; //remember the ending slash
+    geminiBlog.useAsync = true; // enable when being served
+    geminiBlog.timeout = 10000; //milliseconds after which an async request 404s
+
+    //markdown parsing options - passed to marked() in mdConvert()
+    geminiBlog.markDownOptions = {
+        renderer: new marked.Renderer(),
+        gfm: true,
+        tables: true,
+        breaks: false,
+        pedantic: false,
+        sanitize: true,
+        smartLists: true,
+        smartypants: false,
+        //langPrefix: 'hljs ',
+        highlight: function(code, lang) {
+            return hljs.highlightAuto(code, [lang]).value
+        }
+    }
 
 //-- ######################################################## -->
 
 //variables
-	//anything enclosed between these is considered a variable
-	//and will be replaced by handleVars()
-	//values will be looked up from the dictionary below
-	var vprefix = "{|";
-	var vpostfix = "|}";
+    //anything enclosed between these is considered a variable
+    geminiBlog.variablePrefix = "{|";
+    geminiBlog.variablePostfix = "|}";
 
-	var variables_in_entries = [
-		//{'name': "variable", 'value': "varValue"},
-		{name : "blogHome", value : "/geminiblog"}, //used in error50x message
-		{name : "today", value : (new Date).toLocaleDateString()},
-		{name : "marked.js", value: "[`marked.js`](https://github.com/chjj/marked)"},
-	];
+    geminiBlog.variables = [
+        //{'name': "variable", 'value': "varValue"},
+        //in your markdown post: {|img|} will be replaced by the value below
+        {name : "img" , value : "https://wifiextender.github.io/img/file"},
+    ];
 
-//-- ######################################################## -->
-
-	//register new entries here
-//entries begin with ./, they are replaced by the repoBase url
-//this will come handy if CORS is enabled, however rarely
-	//e.g register("Entry Filename", "title", "Publication Date(string)", "tags(string)");
-	register("./firstpost.md", "Introduction", "December 12, 2014", "intro");
-	register("./marktest.md", "Markdown Test", "December 10, 2014", "examples");
-	register("./files-setup.md", "Setting up", "December 11, 2014", "guide");
-	register("./first-entry.md", "First entry", "December 11, 2014", "guide");
-	register("./configuration.md", "Configuration", "December 11, 2014", "guide");
-	register("./changelog.md", "Changelog", "December 07, 2014", "changelog");
 
 //-- ######################################################## -->
 
 //Errors and other messages
-	//404 - entry not found
-	var error404 = ["#Sorry!!!#",
-		"###The entry you requested cannot be found.#",
-		"####Please try again later.#",
-		"Possible reasons of unavailability:  ",
-			"* Entry does not exist (yet).",
-			"* Entry not found at the URL [#{|title|}][1].",
-			"* Are you connected to the internet?",
-		"",
-		"####Would you like to return [home][2]?#",
-		"[1]:{|url|}",
-		"[2]:{|blogHome|}",
-	].join("\n");
+    //404 - entry not found
+    var error404 = ["#Sorry!!!#",
+        "###The entry you requested cannot be found.#",
+        "####Please try again later.#",
+        "Possible reasons of unavailability:  ",
+            "* Entry does not exist (yet).",
+            "* Entry not found at the URL [#{|title|}][1].",
+            "* Are you connected to the internet?",
+        "",
+        "####Would you like to return [home][2]?#",
+        "[1]:{|url|}",
+        "[2]:{|blogHome|}",
+    ].join("\n");
 
-	//50x
-	var error50x = ["#Encountered a server hiccup.#",
-		"####Would you like to return [home][1]?#",
-		//"Error code: **{|errorCode|}**",
-		"[1]:{|blogHome|}",
-	].join("\n");
-
-	//no more entries found.
-	var noMoreEntries = [
-		"Sorry, No more entries found.",
-	].join("\n");
-
+//-- ######################################################## -->

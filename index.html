@@ -1,98 +1,116 @@
-<!doctype html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="Blogging useful linux tips">
+    <link rel="shortcut icon" href="img/icon.ico" />
+    <link rel="canonical" href="https://wifiextender.github.io/">
+    <meta name="author" content="Aaron">
 
-		<!--link href="./images/favicon.svg" rel="icon" type="image/x-icon" /-->
+    <title>Aaron's Blog</title>
 
-		<!--[IF lt IE 9]>
-			<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-		<![endif]-->
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
-		<title>
-			geminiBlog
-		</title>
+    <!-- highlighting template CSS -->
+    <link rel="stylesheet" href="./css/highlight.min.css">
 
-<!-- ######################################################## -->
-<!-- CSS #################################################### -->
-<!-- ######################################################## -->
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
 
-		<link rel="stylesheet" type="text/css" href="./stylesheets/style.css">
+  <body>
+    <div class="navbar navbar-default">
+      <div class="container"><!--center the navbar text-->
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">rm -rf /</a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li><a href="#!frontpage">Home</a></li>
+              <li><a href="#!archive">Archive</a></li>
+            </ul>
 
-<!-- ######################################################## -->
-<!-- JS ##################################################### -->
-<!-- ######################################################## -->
+        <!-- search form -->
+        <form class="navbar-form navbar-left">
+          <div class="input-group custom-search-form">
+            <input type="text" id="uzer-infut" class="form-control">
+              <span class="input-group-btn">
+                <button id="submitfutton" class="btn btn-default" type="submit">
+                  <span class="glyphicon glyphicon-search"></span>
+                </button>
+              </span>
+          </div>
+        </form>
 
-		<script type="text/javascript" src="./js/marked.js"></script>
-		<script type="text/javascript" src="./js/geminiblog.js"></script>
-		<script type="text/javascript" src="./js/config.js"></script>
-	</head>
+          </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+      </div><!--/.container-->
+    </div><!--/.navbar-default-->
 
-	<body>
+    <!--blog content-->
+    <div class="container">
+        <div id="content">
+          <div class="row">
 
-		<div id="content-wrapper">
+            <!--left column-->
+            <div class="page-content col-md-7">
+              <noscript><!--javascript detection-->
+                <div class="alert alert-dismissible alert-danger">
+                    <p>Oh snap! Is <strong>Javascript</strong> enabled ?</p>
+                </div>
+              </noscript>
+              <div id="entries-wrapper"></div><!--page composition tag-->
+            </div><!--/.page-content-->
 
-		<!-- ######################################################## -->
-		<!-- Header ################################################# -->
-		<!-- ######################################################## -->
+            <!--right column-->
+              <div class="sidebar col-md-3">
 
-			<header>
-				<h1 style="font-size: 2.55em; font-weight: 300; margin:0; margin-left: 0.5em; padding-bottom:0.05em;">
-					<a href="" style="color: #39C; text-decoration: none; /*text-shadow: 2px 5px 2px #000;*/">
-						<!--script>document.write(blogName);</script-->
-						gemini<b style="color: #FFFFFF; text-shadow:  0px 2px 1px #000;">Blog</b>
-					</a>
-				</h1>
-			</header>
+                <!-- recent posts sidebar -->
+                <div id="recentBar"><!--hides the recent posts-->
+                  <section class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Recent Posts</h3>
+                    </div>
+                    <div class="list-group">
+                      <div id="recent-posts"></div><!--recent posts composition tag-->
+                    </div>
+                  </section>
+                </div><!-- recentBar -->
 
+                <!-- categories sidebar -->
+                <div id="CategoriesBar"><!--hides the categories-->
+                  <section class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Categories</h3>
+                    </div>
+                    <div class="list-group">
+                        <div id="tags-div"></div><!--categories composition tag-->
+                    </div>
+                  </section>
+                </div><!-- CategoriesBar -->
 
-		<!-- ######################################################## -->
-		<!-- Aside ################################################## -->
-		<!-- ######################################################## -->
+               </div><!--/.sidebar-->
 
-			<aside class="center">
-				<h4 class="left"><a class="navIcons" href="#">Home<!-- &raquo;--></a></h4>
-				<div id="sidebar-wrapper">
-					<!--handled by listView()-->
-				</div>
-				<h4 class="left"><a class="navIcons" href="#archive">Archive<!-- &raquo;--></a></h4>
-				<h4 class="left"><a class="navIcons" href="#tags">Tags<!-- &raquo;--></a></h4>
-			</aside>
+          </div><!--/.row-->
+        </div><!--/.content-->
+    </div><!--/.container-->
 
-		<!-- ######################################################## -->
-		<!-- Section ################################################ -->
-		<!-- ######################################################## -->
-
-			<section class="">
-				<noscript> You need Javascript enabled in the browser to get this to work.</noscript>
-				<div id="entries-wrapper">
-					<!--handled by either snippetView() or detailsView()-->
-				</div>
-				<!--div id="showMore" class="center full-width">
-					<a id="btn-showMore" href="#" onclick="showArchive()">More</a>
-				</div-->
-			</section>
-
-		<!-- ######################################################## -->
-		<!-- Footer ################################################# -->
-		<!-- ######################################################## -->
-
-			<footer class="clear full-width center">
-				<script>
-					document.write("<p>" + "&copy; " + author+" "+(new Date().getFullYear()) + "</p>");
-				</script>
-				<a class="contact" id="contact_homepage"><img class="contacticon" src="./images/icons/iconmonstr-home-5-icon.svg" alt="homepage"/></a>
-				<a class="contact" id="contact_mailme"><img class="contacticon" src="./images/icons/iconmonstr-email-10-icon.svg" alt="mail"/></a>
-				<a class="contact" id="contact_github"><img class="contacticon" src="./images/icons/iconmonstr-github-5-icon.svg" alt="github"/></a>
-				<a class="contact" id="contact_linkedin"><img class="contacticon" src="./images/icons/iconmonstr-linkedin-5-icon.svg" alt="linkedin"/></a>
-				<a class="contact" id="contact_twitter"><img class="contacticon" src="./images/icons/iconmonstr-twitter-5-icon.svg" alt="twitter"/></a>
-				<script>
-					//assign values to contact links
-					contactLinkMaker();
-				</script>
-			</footer>
-		</div>
-	</body>
+    <script src="./js/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.3/marked.min.js"></script>
+    <script src="./js/geminiblog.js"></script>
+    <script src="./js/config.js"></script>
+  </body>
 </html>
